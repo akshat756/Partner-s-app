@@ -269,8 +269,7 @@ label.fl{font-size:12px;color:var(--muted);display:block;margin:10px 0 5px;font-
 .content.ro .seg,.content.ro .stepper,.content.ro .chk,.content.ro select,.content.ro .field,.content.ro .otp,.content.ro .btn{opacity:.6}
 .foot+.nav{border-top:0}
 
-.toast{bottom:calc(168px + env(safe-area-inset-bottom, 0px));top:auto;pointer-events:none}
-@media (min-width:521px) and (hover:hover){.toast{top:92px}}
+.toast{top:auto;bottom:calc(168px + env(safe-area-inset-bottom, 0px));pointer-events:none}
 
 .summary{background:var(--chip);border-radius:12px;padding:10px 12px;margin-bottom:10px;line-height:1.5}
 .card.todo{border-color:#e6d3b0}
@@ -903,7 +902,7 @@ const miniStars = n => `<span class="ministars">${[1, 2, 3, 4, 5].map(i => `<spa
 function slider(action, label, enabled, offLabel) {
   return `<div class="slider ${enabled ? '' : 'disabled'}" data-slide="${action}"><div class="fill"></div><span class="lbl">${enabled ? label : (offLabel || label)}</span><div class="knob">${ic('arrow')}</div></div>`;
 }
-function toast(msg) { ui.toast = msg; clearTimeout(toastTimer); toastTimer = setTimeout(() => { ui.toast = null; render(); }, 2600); }
+function toast(msg) { /* step confirmations turned off */ }
 const histTotals = h => { const sub = h.items.reduce((a, i) => a + SKU[i.sku].price * i.bought, 0); const disc = Math.round(sub * 0.10); return { sub, disc, total: sub - disc }; };
 const histBought = h => h.items.filter(i => i.bought > 0);
 const isDone = t => t.status === 'completed' || RET_STATES.includes(t.status);
