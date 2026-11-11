@@ -153,7 +153,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .upc .dim{color:rgba(255,255,255,.72)}
 .upc .tag.rep{background:#DCFCE7;color:#15803D;vertical-align:middle;font-size:10.5px;padding:2px 7px}
 .upcst{font-size:12px;font-weight:700}.upcst.ok{color:#86EFAC}.upcst.pend{color:#FCA5A5}
-.upcgo{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;color:#fff}
+.upcgo{width:30px;height:30px;border-radius:50%;background:#fff;color:var(--ink);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
 .upcline{font-size:13px;color:rgba(255,255,255,.8);border-top:1px solid rgba(255,255,255,.12);padding-top:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .upcline b{color:#fff}
 .hero{border:1.5px solid var(--ink)}
@@ -225,9 +225,9 @@ label.fl{font-size:12px;color:var(--muted);display:block;margin:10px 0 5px;font-
 .livebar{flex:0 0 auto;display:flex;align-items:center;gap:12px;margin:0 10px 8px;padding:10px 12px 13px;border-radius:14px;background:var(--ink);color:#fff;border:0;text-align:left;font:inherit;box-shadow:0 6px 18px rgba(0,0,0,.18);position:relative;z-index:3;overflow:hidden}
 .livebar b{display:block;font-size:14px;color:#fff;margin-top:1px}.livebar .xs{display:block;color:rgba(255,255,255,.7);font-size:11.5px}
 .livelate{color:#FCA5A5;font-weight:700}
-.liveic{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;color:#86EFAC;flex:0 0 auto}
-.livego{width:34px;height:34px;border-radius:50%;background:#fff;color:var(--ink);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-.liveprog{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.14)}.liveprog span{display:block;height:100%;background:#4ADE80;border-radius:0 3px 3px 0}
+.liveic{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;color:#fff;flex:0 0 auto}
+.livego{width:30px;height:30px;border-radius:50%;background:#fff;color:var(--ink);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.liveprog{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.14)}.liveprog span{display:block;height:100%;background:#fff;border-radius:0 3px 3px 0}
 .livebar+.nav{border-top:0}
 .nav{flex:0 0 auto;display:flex;background:var(--surface);border-top:1px solid var(--line);padding:8px 8px calc(10px + env(safe-area-inset-bottom))}
 .nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:500;color:var(--faint);padding:4px 0;position:relative}
@@ -385,23 +385,17 @@ label.fl{font-size:12px;color:var(--muted);display:block;margin:10px 0 5px;font-
 .calbox::-webkit-scrollbar-thumb:hover{background:#9aa1ad}
 .calbox::-webkit-scrollbar-button{display:none;height:0}
 .sec.first{margin-top:4px}
-.attn{display:flex;flex-direction:column;gap:8px}
-.attnrow{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:10px 12px;font:inherit;color:var(--ink);box-shadow:var(--shadow)}
-.attnrow b{display:block;font-size:13.5px}.attnrow .xs{display:block;color:var(--muted);margin-top:1px}
-.attnic{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-.attnrow.bad{border-color:#F3C4C0;background:#FEF5F5}.attnrow.bad .attnic{background:var(--badbg);color:var(--bad)}
+.attn{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.attnrow{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:0;background:none;padding:12px 12px 12px 14px;font:inherit;color:var(--ink)}
+.attnrow+.attnrow{border-top:1px solid var(--line)}
+.attnrow b{display:block;font-size:13.5px;line-height:1.3}.attnrow .xs{display:block;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.attnrow .grow{min-width:0}
+.attnic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.attnrow.bad .attnic{background:var(--bad);color:#fff}
 .attnrow.warn .attnic{background:var(--warnbg);color:var(--warn)}
-.tdlist{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:4px 0;position:relative}
-.tdlist:before{content:"";position:absolute;left:81px;top:10px;bottom:10px;width:2px;background:var(--line)}
-.tdrow{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:none;padding:8px 12px 8px 10px;font:inherit;color:var(--ink);position:relative}
-.tdrow .tdt{width:58px;font-size:12px;font-weight:700;color:var(--ink);flex:0 0 auto}
-.tdrow .tddot{width:10px;height:10px;border-radius:50%;background:var(--line);border:2px solid var(--surface);flex:0 0 auto;position:relative;z-index:1}
-.tdrow b{display:block;font-size:13.5px}.tdrow .xs{display:block;color:var(--muted);margin-top:1px}
-.tdrow.pend .tddot{background:#DC2626}.tdrow.pend .xs{color:#DC2626;font-weight:600}
-.tdrow.ok .tddot{background:#16A34A}.tdrow.live .tddot{background:#0268FD}.tdrow.live .xs{color:#0268FD;font-weight:600}
-.tdrow.done .tddot{background:#16A34A}.tdrow.done .xs{color:#15803D}
-.tdrow.past{opacity:.6}.tdrow.lunch{padding-top:5px;padding-bottom:5px}.tdrow.lunch .tdt{color:var(--muted);font-weight:600}
-.sec .link.xs{font:inherit;font-size:12px;font-weight:600;color:var(--ink2);display:inline-flex;align-items:center;gap:2px;background:none;border:0}
+.attnlbl{font-size:11px;font-weight:700;border-radius:999px;padding:3px 8px;flex:0 0 auto}
+.attnrow.bad .attnlbl{background:var(--badbg);color:var(--bad)}.attnrow.warn .attnlbl{background:var(--warnbg);color:var(--warn)}
+.attnrow>svg:last-child{color:var(--muted)}
 .retlist{display:flex;flex-direction:column;gap:8px}
 .retrow{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:10px 12px;font:inherit;color:var(--ink);box-shadow:var(--shadow)}
 .retrow b{display:block;font-size:13.5px}.retrow .xs{display:block;margin-top:1px}
@@ -1035,8 +1029,8 @@ function navBar() {
   const late = ip ? (!ip.p.pickedAt ? ip.pickupAt < Date.now() : (!ip.p.verifiedAt && ip.apptAt < Date.now())) : false;
   const live = ip ? `<button class="livebar" data-act="open" data-id="${ip.id}">
       <span class="liveic">${ic(ip.p.pickedAt ? (ip.p.verifiedAt ? 'user' : 'scooter') : 'store', 'l')}</span>
-      <span class="grow"><span class="xs">${late ? '<span class="livelate">Running late</span> · ' : ''}Visit in progress · step ${stepN || 1} of 7</span><b>${esc(ip.customer.name)} · ${TITLES[ip.p.stage || 'details'][0]}</b></span>
-      <span class="livego">${ic('chev', 'l')}</span>
+      <span class="grow"><span class="xs">Visit in progress · step ${stepN || 1} of 7</span><b>${esc(ip.customer.name)} · ${TITLES[ip.p.stage || 'details'][0]}</b></span>
+      <span class="livego">${ic('chev', 's')}</span>
       <span class="liveprog"><span style="width:${Math.round(((stepN || 1) / 7) * 100)}%"></span></span></button>` : '';
   return `${live}<nav class="nav">${tabs.map(([k, l, i, n]) => `<button class="${S.tab === k ? 'on' : ''}" data-act="tab" data-v="${k}">${ic(i, 'l')}${n ? `<span class="badge">${n}</span>` : ''}${l}</button>`).join('')}</nav>`;
 }
@@ -1145,11 +1139,11 @@ function attentionRows() {
     const first = ip.customer.name.split(' ')[0];
     if (!ip.p.pickedAt) {
       const d = Math.round((ip.pickupAt - now) / MIN);
-      if (d < 0) rows.push(['bad', 'alert', `Running late for pickup`, `${first}'s pickup was due ${fmtT(ip.pickupAt)} · ${-d} min ago`, 'open', ip.id]);
-      else if (d <= 60) rows.push(['warn', 'clock', `Pickup for ${first} by ${fmtT(ip.pickupAt)}`, `${d} min left · ${ip.toStore ? ip.toStore[1] + ' min to the dark store' : 'leave on time'}`, 'open', ip.id]);
+      if (d < 0) rows.push(['bad', 'alert', `Running late for pickup`, `${first} · due ${fmtT(ip.pickupAt)} · ${-d} min late`, 'open', ip.id]);
+      else if (d <= 60) rows.push(['warn', 'clock', `Pickup for ${first} by ${fmtT(ip.pickupAt)}`, `${d} min left${ip.toStore ? ' · ' + ip.toStore[1] + ' min ride' : ''}`, 'open', ip.id]);
     } else if (!ip.p.verifiedAt) {
       const d = Math.round((ip.apptAt - now) / MIN);
-      if (d < 0) rows.push(['bad', 'alert', `Running late for ${first}`, `Visit was ${fmtT(ip.apptAt)} · ${-d} min ago · let her know`, 'open', ip.id]);
+      if (d < 0) rows.push(['bad', 'alert', `Running late for ${first}`, `Visit ${fmtT(ip.apptAt)} · ${-d} min late · tell her`, 'open', ip.id]);
       else if (d <= 30) rows.push(['warn', 'clock', `${first}'s visit starts in ${d} min`, `Appointment ${fmtT(ip.apptAt)}`, 'open', ip.id]);
     }
   }
@@ -1160,12 +1154,12 @@ function attentionRows() {
   L.filter(cancelPending).forEach(t => rows.push(['warn', 'clock', `Cancellation under review · ${t.id}`, `Wingit is deciding · ${t.customer.name.split(' ')[0]}'s visit is paused`, 'open', t.id]));
   L.filter(reschedPending).forEach(t => rows.push(['warn', 'clock', `Waiting for ${t.customer.name.split(' ')[0]} to pick a new slot`, `Reschedule request sent · ${t.id}`, 'open', t.id]));
   L.filter(t => t.status === 'return_missing').forEach(t => rows.push(['bad', 'alert', `Item marked missing · ${t.id}`, `Add your comment for the dark store manager`, 'open', t.id]));
-  L.filter(t => t.status === 'return_pending' && t.completedAt && dayDiff(t.completedAt) < 0).forEach(t => rows.push(['bad', 'return', `Return overdue · ${t.id}`, `${returnRows(t).length} items from ${fmtDay(t.completedAt).toLowerCase()} still with you · return today`, 'open', t.id]));
+  L.filter(t => t.status === 'return_pending' && t.completedAt && dayDiff(t.completedAt) < 0).forEach(t => rows.push(['bad', 'return', `Return overdue · ${t.id}`, `${returnRows(t).length} items from ${fmtDay(t.completedAt).toLowerCase()} · return today`, 'open', t.id]));
   const order = { bad: 0, warn: 1 };
   return rows.sort((a, b) => order[a[0]] - order[b[0]]);
 }
 const attentionHtml = rows => rows.length ? `
-    <div class="sec first"><h2>Needs your attention</h2></div>
+    <div class="sec first"><h2>Needs your attention <span class="count">${rows.length}</span></h2></div>
     <div class="attn">${rows.map(r => `<button class="attnrow ${r[0]}" data-act="${r[4]}" ${r[5] ? `data-id="${r[5]}"` : ''}><span class="attnic">${ic(r[1], 's')}</span><span class="grow"><b>${r[2]}</b><span class="xs">${r[3]}</span></span>${ic('chev', 's')}</button>`).join('')}</div>` : '';
 
 /* Today's schedule, compact, on Home */
@@ -1229,7 +1223,7 @@ function homeView() {
       </div>
       <div class="row sb">
         <div><div class="count" data-countdown="${next.pickupAt}" data-zero="Leave now">--:--:--</div></div>
-        <span class="upcgo">${ic('chev', 'l')}</span>
+        <span class="upcgo" aria-label="Open">${ic('chev', 's')}</span>
       </div>
       <div class="upcline"><b>${esc(next.customer.name)}</b>${next.history.length ? ` <span class="tag rep">Repeat</span>` : ''} · ${fmtT(next.apptAt)} · ${esc(next.address.area.split(',')[0])} · ${n} products</div>
     </div>`; })() : `<div class="timer"><div><div class="label">Upcoming order</div><div class="count" style="font-size:16px">No upcoming visits</div></div></div>`;
@@ -1696,7 +1690,7 @@ function travel(t) {
       <div class="xs muted mt">Calls use a masked number · ${esc(t.customer.phone)}</div>
     </div>
     ${p_cancelLink(t)}`;
-  return { body, foot: slider('goVerify', 'Reached · Enter customer OTP', !cancelBlocked(t), 'Waiting for cancellation decision') };
+  return { body, foot: slider('goVerify', 'Enter OTP', !cancelBlocked(t), 'Waiting for cancellation decision') };
 }
 
 /* Screen 5 – Verify */
