@@ -289,6 +289,8 @@ label.fl{font-size:12px;color:var(--muted);display:block;margin:10px 0 5px;font-
 .prow.missing{background:var(--badbg);border:1px solid #efc3bd;border-radius:12px;padding:10px;margin:4px 0}
 .misscol{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:0 0 auto}
 .pagetitle{display:flex;align-items:center;gap:12px}
+.hbell{position:relative;width:28px;height:28px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--ink);flex:0 0 auto}
+.hbell .badge{position:absolute;top:-6px;right:-7px;min-width:16px;height:16px;border-radius:8px;background:#DC2626;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 5px;border:2px solid var(--surface)}
 .sos{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:5px;height:34px;padding:0 12px;border-radius:999px;background:#d92d20;color:#fff;font-weight:700;font-size:13px;letter-spacing:.04em;flex:0 0 auto;user-select:none;-webkit-user-select:none;touch-action:none}
 .sos.quiet{background:var(--surface);color:var(--ink2);border:1.5px solid #d6d5cf;padding:0;width:34px;justify-content:center}
 .sos>*{position:relative}
@@ -453,6 +455,22 @@ button.stat{font:inherit;color:inherit;cursor:pointer}button.stat svg{color:var(
 .belldot{position:absolute;top:6px;right:8px;width:10px;height:10px;border-radius:50%;background:#d92d20;border:1.5px solid var(--surface)}
 .nlist{margin-top:4px}
 .nrow.tap{cursor:pointer}
+.oscope{margin-bottom:2px}
+.operiod button.none{opacity:.45}
+.operiod .calchip{padding:0 10px;display:inline-flex;align-items:center}
+.ocal{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:var(--shadow)}
+.ocal .link.xs{font-size:12px;font-weight:600;color:var(--ink2);background:none;border:0;padding:0}
+.ocal .link.xs.on{color:var(--ink);text-decoration:underline}
+.iconbtn.sm{width:30px;height:30px}
+.ocd.sel{background:var(--ink);color:#fff}.ocd.sel .ocn{color:rgba(255,255,255,.75)}
+.ocgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.ocgrid.head span{font-size:11px;color:var(--muted);text-align:center;padding-bottom:2px}
+.ocd{height:40px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px;color:var(--ink);background:none;border:0;font-family:inherit}
+.ocd.fut{color:#c9c8c2}
+.ocd.has{background:var(--chip);font-weight:700}
+.ocd.today{box-shadow:inset 0 0 0 2px var(--ink)}
+.ocn{font-size:9.5px;font-weight:600;color:var(--muted);line-height:1}
+.iconbtn.off{opacity:.3}
 .operiod{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.operiod::-webkit-scrollbar{display:none}.operiod button{flex:0 0 auto}
 .ostats{display:flex;justify-content:space-between;gap:6px;font-size:12px;color:var(--ink2);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:9px 12px}
 .ostats span{display:flex;align-items:center;gap:5px;white-space:nowrap}.ostats svg.i.s{width:14px;height:14px;color:var(--muted)}
@@ -1023,7 +1041,7 @@ function qr(seedStr) {
    ========================================================= */
 function navBar() {
   const newCount = attentionRows().length;
-  const tabs = [['home', 'Home', 'home', newCount], ['orders', 'Last orders', 'orders', 0], ['profile', 'Profile', 'user', 0]];
+  const tabs = [['home', 'Home', 'home', 0], ['orders', 'Last orders', 'orders', 0], ['profile', 'Profile', 'user', 0]];
   const ip = S.view === 'tabs' ? all().find(t => t.status === 'in_progress') : null;
   const stepN = ip ? (parseInt((TITLES[ip.p.stage || 'details'][1].match(/Step (\d)/) || [0, 0])[1]) || 0) : 0;
   const late = ip ? (!ip.p.pickedAt ? ip.pickupAt < Date.now() : (!ip.p.verifiedAt && ip.apptAt < Date.now())) : false;
@@ -1158,8 +1176,9 @@ function attentionRows() {
   const order = { bad: 0, warn: 1 };
   return rows.sort((a, b) => order[a[0]] - order[b[0]]);
 }
+const bellBtn = n => `<button class="hbell" data-act="notifs" aria-label="Notifications">${ic('bell', 's')}${n ? `<span class="badge">${n}</span>` : ''}</button>`;
 const attentionHtml = rows => rows.length ? `
-    <div class="sec first"><h2>Needs your attention <span class="count">${rows.length}</span></h2></div>
+    <div class="sec first"><h2>Needs your attention</h2></div>
     <div class="attn">${rows.map(r => `<button class="attnrow ${r[0]}" data-act="${r[4]}" ${r[5] ? `data-id="${r[5]}"` : ''}><span class="attnic">${ic(r[1], 's')}</span><span class="grow"><b>${r[2]}</b><span class="xs">${r[3]}</span></span>${ic('chev', 's')}</button>`).join('')}</div>` : '';
 
 /* Today's schedule, compact, on Home */
@@ -1252,10 +1271,23 @@ function homeView() {
 /* =========================================================
    LAST ORDERS (tab)
    ========================================================= */
-const OPERIODS = [['today', 'Today'], ['week', 'This week'], ['month', 'This month'], ['all', 'All']];
-const inPeriod = (t, per) => { const d = dayDiff(t.completedAt || t.apptAt); return per === 'today' ? d === 0 : per === 'week' ? d >= -6 : per === 'month' ? d >= -29 : true; };
+/* Day filter for Last orders: Today, Yesterday, then dates, plus All */
+const oDayLabel = back => { const d = new Date(Date.now() - back * 24 * HR); return back === 0 ? 'Today' : back === 1 ? 'Yesterday' : d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' }); };
+function oDays() {
+  const seen = new Set(doneList().map(t => -dayDiff(t.completedAt || t.apptAt)).filter(b => b >= 0));
+  const out = [0, 1].concat([...seen].filter(b => b > 1).sort((a, b) => a - b));
+  return out.map(b => ['d' + b, oDayLabel(b), seen.has(b)]);
+}
+const inPeriod = (t, per) => {
+  if (per === 'all') return true;
+  const back = -dayDiff(t.completedAt || t.apptAt);
+  if (per === 'week') return back >= 0 && back <= 6;
+  if (per === 'month') return back >= 0 && back <= 29;
+  return back === Number(String(per).slice(1));
+};
 const onTime = t => t.p.verifiedAt && t.p.verifiedAt <= t.apptAt + 10 * MIN;
 const lateMins = t => t.p.verifiedAt ? Math.round((t.p.verifiedAt - t.apptAt) / MIN) : 0;
+const p_onTimeTag = t => t.p.verifiedAt ? (onTime(t) ? '<span class="xs ok">On time</span>' : `<span class="xs late">${lateMins(t)} min late</span>`) : '';
 function orderCard(t) {
   const A = t.p.outcome === 'A', cx = isCancelled(t), open = RET_STATES.includes(t.status);
   const tried = t.items.filter(i => !fullyNA(t, i) && ((t.p.trial || {})[i.sku] || {}).st === 'tried').length, nb = t.items.filter(i => sold(t, i.sku)).length;
@@ -1264,16 +1296,41 @@ function orderCard(t) {
   const st = open ? ['!', RET_LABEL[t.status][0]] : cx ? ['✕', 'Cancelled · ' + (cancelInfo(t).reason || '—')] : A ? ['✓', `Purchased · ${nb} of ${t.items.length} products`] : ['–', 'No purchase' + (why ? ' · ' + why : '')];
   const foot = open ? `<button class="btn sm" style="padding:7px 12px" data-act="open" data-id="${t.id}">${ic(RET_BTN[t.status][0], 's')} ${RET_BTN[t.status][1]}</button>`
     : cx ? `<span class="xs muted">${esc(cancelInfo(t).when)}</span>`
-    : `<span class="xs muted">${A ? esc(payVia(t.p)) : `${tried} of ${t.items.length} tried`}</span>${t.p.rating ? `<span class="orate">${miniStars(t.p.rating)}</span>` : ''}`;
+    : `<span class="xs muted">${A ? `${nb} item${nb === 1 ? '' : 's'} sold` : `${tried} of ${t.items.length} tried`}</span>${p_onTimeTag(t)}`;
   return `<div class="ocard ${tone}" data-act="order" data-id="${t.id}">
-    <div class="o1"><b>${esc(t.customer.name)}</b>${t.history.length ? '<span class="cevtag">Repeat</span>' : ''}<span class="oamt">${A && !cx ? money(totals(t).total) : ''}</span></div>
+    <div class="o1"><b>${esc(t.customer.name)}</b>${t.history.length ? '<span class="cevtag">Repeat</span>' : ''}</div>
     <div class="o2">${fmtT(t.apptAt)} – ${fmtT(t.apptEnd)} · ${esc(t.address.area.split(',')[0])} · ${t.id}</div>
     <div class="ost"><span class="stdot">${st[0]}</span>${esc(st[1])}</div>
     <div class="ofoot">${foot}</div>
   </div>`;
 }
+function oCalHtml(mb, per) {
+  const now = new Date(Date.now()), base = new Date(now.getFullYear(), now.getMonth() - mb, 1);
+  const y = base.getFullYear(), mo = base.getMonth(), first = new Date(y, mo, 1).getDay(), days = new Date(y, mo + 1, 0).getDate();
+  const counts = {};
+  doneList().forEach(t => { const d = new Date(t.completedAt || t.apptAt); if (d.getFullYear() === y && d.getMonth() === mo) counts[d.getDate()] = (counts[d.getDate()] || 0) + 1; });
+  const t0 = new Date(Date.now()); t0.setHours(0, 0, 0, 0);
+  let cells = '';
+  for (let i = 0; i < first; i++) cells += '<span></span>';
+  for (let d = 1; d <= days; d++) {
+    const back = Math.round((t0 - new Date(y, mo, d)) / (24 * HR)), n = counts[d] || 0, sel = per === 'd' + back, isToday = back === 0;
+    cells += n ? `<button class="ocd has ${sel ? 'sel' : ''} ${isToday ? 'today' : ''}" data-act="oPick" data-v="d${back}">${d}<span class="ocn">${n}</span></button>`
+      : `<span class="ocd ${back < 0 ? 'fut' : ''} ${isToday ? 'today' : ''}">${d}</span>`;
+  }
+  return `<div class="ocal">
+    <div class="row sb" style="align-items:center;margin-bottom:8px">
+      <button class="iconbtn sm" data-act="oCalM" data-v="${mb + 1}" aria-label="Previous month">${ic('back', 's')}</button>
+      <div class="b small">${base.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })}</div>
+      <button class="iconbtn sm ${mb ? '' : 'off'}" ${mb ? `data-act="oCalM" data-v="${mb - 1}"` : ''} aria-label="Next month">${ic('chev', 's')}</button>
+    </div>
+    <div class="ocgrid head">${['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(x => `<span>${x}</span>`).join('')}</div>
+    <div class="ocgrid">${cells}</div>
+    <button class="link xs ${per === 'all' ? 'on' : ''}" data-act="operiod" data-v="all" style="margin-top:8px">Show all days</button>
+  </div>`;
+}
+
 function ordersView() {
-  const per = S.operiod || 'week';
+  const per = S.operiod || (oDays().find(x => x[2]) || ['d0'])[0];   /* opens on the latest day that has orders */
   const list = doneList().filter(t => inPeriod(t, per)), visits = list.filter(t => !isCancelled(t));
   const bought = visits.filter(t => t.p.outcome === 'A');
   const collected = bought.reduce((a, t) => a + totals(t).total, 0);
@@ -1286,21 +1343,24 @@ function ordersView() {
   const tab = groups[S.otab] ? S.otab : 'done', f = S.filter || 'all';
   const shown = groups[tab].filter(t => tab !== 'done' || f === 'all' || t.p.outcome === f);
   let html = '', lastDay = '';
-  shown.forEach(t => { const d = fmtDay(t.completedAt || t.apptAt); if (d !== lastDay) { html += `<div class="daylabel">${d}</div>`; lastDay = d; } html += orderCard(t); });
+  shown.forEach(t => { const d = fmtDay(t.completedAt || t.apptAt); if (['week', 'month', 'all'].includes(per) && d !== lastDay) { html += `<div class="daylabel">${d}</div>`; lastDay = d; } html += orderCard(t); });
   return `
   <header class="pagetitle"><div class="grow"><h1>Last orders</h1><p>Your visits, returns and cancellations</p></div>${sosBtn(false)}</header>
   <main class="content">
-    <div class="chips operiod">${OPERIODS.map(([k, l]) => `<button class="${per === k ? 'on' : ''}" data-act="operiod" data-v="${k}">${l}</button>`).join('')}</div>
+    <div class="seg tabs3 oscope">${[['day', 'By day'], ['week', 'This week'], ['month', 'This month']].map(([k, l]) => `<button class="${(k === 'day' ? !['week', 'month', 'all'].includes(per) : per === k) ? 'on' : ''}" data-act="oscope" data-v="${k}">${l}</button>`).join('')}</div>
+    ${['week', 'month', 'all'].includes(per) ? '' : `<div class="chips operiod">${oDays().slice(0, 8).map(([k, l, has]) => `<button class="${per === k ? 'on' : ''} ${has ? '' : 'none'}" data-act="operiod" data-v="${k}">${l}</button>`).join('')}${!oDays().slice(0, 8).some(x => x[0] === per) && per !== 'all' ? `<button class="on" data-act="operiod" data-v="${per}">${oDayLabel(Number(per.slice(1)))}</button>` : ''}<button class="calchip ${ui.oCal ? 'on' : ''}" data-act="oCal" aria-label="Pick a date">${ic('calendar', 's')}</button></div>
+    ${ui.oCal ? oCalHtml(ui.oCalM || 0, per) : ''}`}
     <div class="grid3">
       <div class="stat"><div class="v">${visits.length}</div><div class="k">Visits</div></div>
       <div class="stat"><div class="v">${rate}%</div><div class="k">Bought</div></div>
-      <div class="stat"><div class="v">${money(collected)}</div><div class="k">Collected</div></div>
+      <div class="stat"><div class="v">${items}</div><div class="k">Items sold</div></div>
     </div>
-    <div class="ostats"><span>${ic('bag', 's')} ${items} item${items === 1 ? '' : 's'} sold</span><span>${ic('star', 's')} ${avg ? avg + ' avg rating' : 'No ratings'}</span><span>${ic('clock', 's')} ${ontime !== null ? ontime + '% on time' : '—'}</span></div>
+    <div class="ostats"><span>${ic('check', 's')} ${bought.length} of ${visits.length} visit${visits.length === 1 ? '' : 's'} bought</span><span>${ic('clock', 's')} ${ontime !== null ? ontime + '% on time' : '—'}</span></div>
+    ${['week', 'month', 'all'].includes(per) ? '' : (() => { const wv = doneList().filter(t => inPeriod(t, 'week') && !isCancelled(t)), wb = wv.filter(t => t.p.outcome === 'A'); return wv.length ? `<div class="xs muted center">This week so far · ${wv.length} visits · ${Math.round(wb.length / wv.length * 100)}% bought</div>` : ''; })()}
     <div class="seg tabs3">${[['done', 'Completed'], ['pending', 'Pending actions'], ['cancelled', 'Cancelled']].map(([k, l]) => `<button class="${tab === k ? 'on' : ''}" data-act="otab" data-v="${k}">${l}<span class="segn">${groups[k].length}</span></button>`).join('')}</div>
     ${tab === 'done' ? `<div class="chips">${[['all', 'All'], ['A', 'Purchased'], ['B', 'No purchase']].map(([k, l]) => `<button class="${f === k ? 'on' : ''}" data-act="filter" data-v="${k}">${l}</button>`).join('')}</div>` : ''}
     ${tab === 'pending' && shown.length ? '<div class="xs muted">Visits finished, but the return or the manager’s check isn’t done yet.</div>' : ''}
-    ${html || `<div class="empty">${ic(tab === 'cancelled' ? 'x' : tab === 'pending' ? 'clock' : 'orders')}${{ done: 'No completed orders', pending: 'No pending actions', cancelled: 'No cancelled orders' }[tab]}${per !== 'all' ? `<span class="xs">for ${OPERIODS.find(x => x[0] === per)[1].toLowerCase()}</span>` : ''}</div>`}
+    ${html || `<div class="empty">${ic(tab === 'cancelled' ? 'x' : tab === 'pending' ? 'clock' : 'orders')}${{ done: 'No completed orders', pending: 'No pending actions', cancelled: 'No cancelled orders' }[tab]}${per === 'all' ? '' : `<span class="xs">${per === 'week' ? 'this week' : per === 'month' ? 'this month' : 'on ' + (oDays().find(x => x[0] === per) || [0, 'this day'])[1].toLowerCase()}</span>`}</div>`}
   </main>`;
 }
 
@@ -1353,7 +1413,7 @@ function orderDetail(t) {
     <div class="card center">
       <div class="bigicon ${A ? 'ok' : ''}">${ic(A ? 'bag' : 'x')}</div>
       <div class="b mt" style="font-size:16px">${A ? 'Purchased' : 'No purchase'}</div>
-      ${A ? `<div style="font-size:26px;font-weight:700;letter-spacing:-.02em">${money(tt.total)}</div>` : ''}
+      ${A ? `<div class="small muted">${t.items.filter(i => sold(t, i.sku)).length} of ${t.items.length} products · ${soldUnits(t)} item${soldUnits(t) === 1 ? '' : 's'}</div>` : ''}
       <div class="small muted">${fmtDay(t.completedAt)}, ${fmtT(t.completedAt)} · ${t.id}</div>
       ${retTag(t) ? `<div class="mt">${retTag(t)}</div>` : ''}
     </div>
@@ -1367,12 +1427,12 @@ function orderDetail(t) {
     <div class="card"><div class="ct">Timeline</div><div class="tl">${steps.map(([l, ts]) => `<div class="st ${ts ? '' : 'pending'}"><div class="small b">${l}</div><div class="xs muted">${ts ? fmtDay(ts) + ', ' + fmtT(ts) : 'Not done yet'}</div></div>`).join('')}</div></div>
     <div class="card"><div class="ct">Products · ${t.items.length}</div>${t.items.map(i => { const s = SKU[i.sku], q = sold(t, i.sku), e = (p.trial || {})[i.sku] || {}; return `<div class="prow">${thumb(i.sku)}<div class="grow"><div class="b small">${esc(s.brand)}</div><div class="small">${esc(s.name)}</div><div class="xs muted">${esc(s.variant)} · ${fullyNA(t, i) ? 'Not available at pickup' : e.st === 'nottried' ? 'Not tried' : 'Tried'}${i.extra ? ' · Extra' : ''}</div>${!q && e.reason ? `<div class="xs mt4">Not bought: ${esc(e.reason)}${e.rnote ? ' · ' + esc(e.rnote) : ''}</div>` : ''}</div>${q ? `<div class="center"><span class="tag ok">Bought ×${q}</span><div class="xs b mt4">${money(s.price * q)}</div></div>` : '<span class="tag">Not bought</span>'}</div>`; }).join('')}</div>
     ${A ? `<div class="card"><div class="ct">Payment</div>
-      <div class="kv"><span>Subtotal</span><b>${money(tt.sub)}</b></div><div class="kv"><span>Trial offer (10%)</span><b>− ${money(tt.disc)}</b></div>
+
       <div class="kv"><span>Paid via</span><b>Customer app · ${esc(payVia(p))}</b></div>
       ${p.pay.txn ? `<div class="kv"><span>Transaction ID</span><b>${esc(p.pay.txn)}</b></div>` : ''}
-      <div class="kv total"><span>Collected</span><b>${money(tt.total)}</b></div></div>` : ''}
+      <div class="kv"><span>Paid at</span><b>${fmtT(p.pay.at)}</b></div></div>` : ''}
     <div class="card"><div class="ct">Visit feedback</div>
-      <div class="kv"><span>Session rating</span><b>${p.rating ? miniStars(p.rating) : '—'}</b></div>
+      <div class="kv"><span>Your rating of the session</span><b>${p.rating ? miniStars(p.rating) : '—'}</b></div>
       ${(p.best || []).length ? `<div class="kv"><span>Went best</span><b>${esc(p.best.join(', '))}</b></div>` : ''}
       ${(p.wrong || []).length ? `<div class="kv"><span>Went wrong</span><b>${esc(p.wrong.join(', '))}</b></div>` : ''}
       <div class="kv"><span>Notes</span><b>${esc(p.npNote || '—')}</b></div></div>
@@ -2244,7 +2304,11 @@ function act(a, d) {
     }
     case 'resume': ui.viewStage = null; break;
     case 'filter': S.filter = d.v; break;
-    case 'operiod': S.operiod = d.v; break;
+    case 'operiod': S.operiod = d.v; ui.oCal = false; break;
+    case 'oscope': S.operiod = d.v === 'day' ? (oDays().find(x => x[2]) || ['d0'])[0] : d.v; ui.oCal = false; break;
+    case 'oCal': ui.oCal = !ui.oCal; ui.oCalM = 0; break;
+    case 'oCalM': ui.oCalM = Number(d.v); break;
+    case 'oPick': S.operiod = d.v; ui.oCal = false; break;
     case 'otab': S.otab = d.v; S.filter = 'all'; break;
     case 'order': S.view = 'order'; S.orderId = d.id; break;
     case 'soon': toast(d.v === 'Log out' ? 'Log out is turned off in this demo' : `${d.v} settings coming soon`); break;
